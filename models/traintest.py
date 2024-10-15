@@ -1,6 +1,6 @@
 import torch
 
-def Splitter(dataset,splits,subject_no=0):
+def Splitter(data,splits,subject_no=0):
     if subject_no!=0:
         x_train=[data[i]['eeg'][:,20:460] for i in splits['splits'][0]['train'] if data[i]['subject']==subject_no]
         x_val=[data[i]['eeg'][:,20:460]  for i in splits['splits'][0]['val'] if data[i]['subject']==subject_no]
@@ -21,7 +21,7 @@ def Splitter(dataset,splits,subject_no=0):
         
     return x_train,x_val,x_test,y_train,y_val,y_test
 
-def train_model(model, train_loader, val_loader, criterion, optimizer,num_epochs=50):
+def train_model(model, train_loader, val_loader, criterion, optimizer,device,num_epochs=50):
     for epoch in range(num_epochs):
         model.train()  # Set the model to training mode
         running_loss = 0.0
