@@ -6,12 +6,14 @@ class TemporalBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, dilation_rates):
         super().__init__()
         layers = []
-        for i,dilation in enumerate(dilation_rates):
+        for i, dilation in enumerate(dilation_rates):
             layers.append(
                 nn.Conv1d(
-                    in_channels if i==0 else out_channels, 
-                    out_channels, kernel_size=kernel_size, 
-                    padding=(kernel_size-1 // 2) * dilation, dilation=dilation
+                    in_channels if i == 0 else out_channels,
+                    out_channels,
+                    kernel_size=kernel_size,
+                    padding=(kernel_size - 1 // 2) * dilation,
+                    dilation=dilation,
                 )
             )
             layers.append(nn.ReLU())
@@ -55,7 +57,7 @@ class ResidualBlock(nn.Module):
 
 # Define Encoder
 class EEGEncoder(nn.Module):
-    def __init__(self, num_channels=128, temp_channels=64, spatial_channels=32, kernel_size=3, dilation_rates=[1,2,4,8], num_residual_blocks=2, num_classes=40):
+    def __init__(self, num_channels=128, temp_channels=64, spatial_channels=32, kernel_size=3, dilation_rates=[1,2,4,8], num_residual_blocks=2, num_classes=40, latent_dim=128):
         super().__init__()
 
         # Temporal Block to capture temporal dependencies
@@ -66,10 +68,16 @@ class EEGEncoder(nn.Module):
 
         # Residual Blocks for added depth
         self.res_blocks = nn.ModuleList([ResidualBlock(spatial_channels) for _ in range(num_residual_blocks)])
-        # Fully connected layer for classification
-        self.fc = nn.Linear(spatial_channels, num_classes)
+
+        # Fully connected layers for latent vector and classification
+        # Here we need to compute the correct input size to the fully connected layer.
+        # The size after residual block and pooling is (batch_size, spatial_channels, 1, 1).
+        # We need to flatten it into (batch_size, spatial_channels) before feeding it to fc_latent.
+        self.fc_latent = nn.Linear(spatial_channels, latent_dim)  # Create latent vector of size 128
+        self.fc_classification = nn.Linear(latent_dim, num_classes)  # Final classification layer (num_classes = 40)
 
     def forward(self, x):
+        x=x.float()
         # Pass through Temporal Block
         x = self.temporal_block(x)  # Shape: (batch_size, temp_channels, time_steps)
 
@@ -79,30 +87,33 @@ class EEGEncoder(nn.Module):
 
         # Pass through Residual Blocks
         for res_block in self.res_blocks:
-            x = res_block(x)  # Shape maintained
-        x = nn.AdaptiveAvgPool2d((1, 1))(x)
-        x = x.view(x.size(0), -1)
-        # Final classification layer
-        x = self.fc(x)  # Shape: (batch_size, num_classes)
+            x = res_block(x)  # Shape maintained after residual block (batch_size, spatial_channels, temp_channels, time_steps)
 
-        return x
+        # Apply Adaptive Average Pooling to reduce spatial dimensions (time_steps)
+        x = nn.AdaptiveAvgPool2d((1, 1))(x)  # Shape: (batch_size, spatial_channels, 1, 1)
+        x = x.view(x.size(0), -1)  # Flatten the output (batch_size, spatial_channels)
+
+        # Create the latent vector (128)
+        latent_vector = self.fc_latent(x)  # Shape: (batch_size, latent_dim)
+
+        # Classification Output (num_classes)
+        class_output = self.fc_classification(latent_vector)  # Shape: (batch_size, num_classes)
+
+        return class_output, latent_vector
 
 
-# Example usage
-"""if __name__ == "__main__":
-    # Instantiate the model
-    #model = EEGEncoder(
-        num_channels=128,       # EEG channels
-        temp_channels=64,       # Temporal features
-        spatial_channels=32,    # Spatial features
-        kernel_size=3,          # Kernel size for temporal block
-        dilation_rates=[1, 2, 4, 8],  # Dilation rates for temporal block
-        num_residual_blocks=2,  # Number of residual blocks
-        num_classes=40          # Number of classes for classification
-    )
-
-    # Sample input with shape (batch_size, num_channels, time_steps)
-    x = torch.randn(16, 128, 440)
-    output = model(x)
-    print(f"Output shape: {output.shape}")  # Expected shape: (16, 40)
-"""
+# Testing the model with a dummy input
+if __name__ == "__main__":
+    # Example input: (batch_size=16, input_channels=128, num_timestamps=440)
+    model = EEGEncoder()
+    
+    # Create dummy input tensor with the expected size
+    dummy_input = torch.randn(16, 128, 440)  # (batch_size, channels, num_timestamps)
+    
+    # Ensure the input tensor is float32
+    dummy_input = dummy_input.float()  # Explicitly cast to float32
+    
+    # Forward pass
+    class_output, latent_vector = model(dummy_input)
+    print("Class Output Shape:", class_output.shape)  # Should be (16, num_classes)
+    print("Latent Vector Shape:", latent_vector.shape)  # Should be (16, latent_dim)

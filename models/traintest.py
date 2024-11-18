@@ -32,7 +32,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer,device,num
         for inputs, labels in train_loader:
             inputs, labels = inputs.to(device), labels.to(device)
             optimizer.zero_grad()  # Zero the gradients
-            outputs = model(inputs)  # Forward pass
+            outputs, latent_train = model(inputs)  # Forward pass
             loss = criterion(outputs, labels)  # Calculate loss
             loss.backward()  # Backward pass
             optimizer.step()  # Update weights
@@ -52,7 +52,8 @@ def train_model(model, train_loader, val_loader, criterion, optimizer,device,num
 
         with torch.no_grad():  # Disable gradient calculation
             for inputs, labels in val_loader:
-                outputs = model(inputs)  # Forward pass
+                inputs, labels = inputs.to(device), labels.to(device)
+                outputs, latent_val = model(inputs)  # Forward pass
                 loss = criterion(outputs, labels)  # Calculate loss
                 val_loss += loss.item()  # Accumulate validation loss
 
@@ -74,14 +75,14 @@ def train_model(model, train_loader, val_loader, criterion, optimizer,device,num
               f"Training Accuracy: {train_accuracy:.2f}%, "
               f"Validation Accuracy: {val_accuracy:.2f}%")
         
-def evaluate_model(model, test_loader):
+def evaluate_model(model,device, test_loader):
     model.eval()
     correct = 0
     total = 0
     with torch.no_grad():
         for inputs, labels in test_loader:
             inputs, labels = inputs.to(device), labels.to(device)
-            outputs = model(inputs)
+            outputs, latent_test = model(inputs)
             _, predicted = torch.max(outputs, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
