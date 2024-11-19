@@ -1,0 +1,1 @@
+Contains approaches of different types of GANs
