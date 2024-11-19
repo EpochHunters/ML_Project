@@ -4,7 +4,7 @@
 This project aims to classify EEG signals using various deep learning architectures, enhancing the understanding of brain activity patterns and reconstructing the image from the EEG signals. We implemented multiple models, including CNN-LSTM hybrids and encoder-based architectures, to achieve improved classification accuracy. For the image generation task we implemented spectrally normalised GAN and conditional GAN models.
 
 ## Outcomes
-1. **Improved Classification Accuracy**: Our current model achieves an accuracy of 93% in classifying EEG signals which was achieved by redifining and refining the encooder for spatial and temporal pattern recognition. The EEG signal classification into 40 classes is achieved through various othier models also of which the best performing is the encoder architecture.
+1. **Improved Classification Accuracy**: Our current model achieves an accuracy of 93% in classifying EEG signals which was achieved by redifining and refining the encoder for spatial and temporal pattern recognition. The EEG signal classification into 40 classes is achieved through various othier models also of which the best performing is the encoder architecture.
   
 3. **Feature Representation**: Using temporal, spatial, and residual blocks of the encoder architecture, captured refined features from EEG signals, leading to a better understanding of brain activity patterns and represented it in a 128 dimensional latent feature vector. This feature vector is used as input for the GAN architecture.
 
