@@ -1,4 +1,4 @@
-# EEG Classification and Image Visualization Project Documentation
+![image](https://github.com/user-attachments/assets/3972d716-ba1d-4891-88c5-70cfe63c4df4)![image](https://github.com/user-attachments/assets/7f7702a3-9706-4909-afe1-c6659658e9d5)# EEG Classification and Image Visualization Project Documentation
 
 ## Project Overview
 This project aims to classify EEG signals using various deep learning architectures, enhancing the understanding of brain activity patterns and reconstructing the image from the EEG signals. We implemented multiple models, including CNN-LSTM hybrids and encoder-based architectures, to achieve improved classification accuracy. For the image generation task we implemented spectrally normalised GAN and conditional GAN models.
@@ -18,3 +18,11 @@ This project aims to classify EEG signals using various deep learning architectu
     3. Leveraging the classification task of the EEG data, a ResNet50 model was trained to classify the imaeges into feature vectors for each class, which further acted as input for the GAN archutecture producing         images pertaining to the specific class that was given as stimuli.
 
 8. **Advancement in BCI Technology**: Our study contributes to the future of brain-computer interfaces, enhancing EEG signal decoding and visual stimulus reconstruction.
+
+## Contributions
+Maneesh Pulidindi: Worked on Preprocessing & State Diffusion Models, Fine tuned it, but instead of text, used EEG embeddings.
+Anshal Khatri: Bi-LSTM-CNN-GAN was the approach he worked on & created the documentation of the project.
+Byomakesh Panda: Worked on Simultaneous Generation & Classification using 2 Headed Model using  LSTM and GANs.
+                  Also worked on extracting image feature vectors by applying Transfer Learning using ResNet18 model and using it as latent vector for GAN.
+Chinmay Bakhale: Worked on a new approach which uses images to generate latent vector for training GANs.
+Raghav Borikar: Improvised the Classification Step & worked on SNGAN with Ready Embeddings fine tuned for each person. This was done to ensure that training time was reduced & more epochs could be run.
