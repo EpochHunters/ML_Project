@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/3972d716-ba1d-4891-88c5-70cfe63c4df4)![image](https://github.com/user-attachments/assets/7f7702a3-9706-4909-afe1-c6659658e9d5)# EEG Classification and Image Visualization Project Documentation
+EEG Classification and Image Visualization Project Documentation
 
 ## Project Overview
 This project aims to classify EEG signals using various deep learning architectures, enhancing the understanding of brain activity patterns and reconstructing the image from the EEG signals. We implemented multiple models, including CNN-LSTM hybrids and encoder-based architectures, to achieve improved classification accuracy. For the image generation task we implemented spectrally normalised GAN and conditional GAN models.
