@@ -6,7 +6,6 @@
 - [Approaches for Image Generation](#approaches-for-image-generation)  
 - [Advancements in BCI Technology](#advancements-in-bci-technology)  
 - [Contributions](#contributions)  
-- [License](#license)  
 
 ---
 
