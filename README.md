@@ -65,21 +65,21 @@ This project contributes to advancements in **brain-computer interface (BCI)** t
 ## Contributions  
 
 ### **Team Members and Responsibilities**  
-- **Maneesh Pulidindi**:  
+- **Maneesh Pulidindi 12241380**:  
   - Worked on preprocessing EEG signals.  
   - Implemented state diffusion models, fine-tuned to use EEG embeddings instead of text.  
 
-- **Anshal Khatri**:  
+- **Anshal Khatri M24DS001**:  
   - Developed and fine-tuned the Bi-LSTM-CNN-GAN model.  
   - Created the project's documentation.  
 
-- **Byomakesh Panda**:  
+- **Byomakesh Panda M24DS004**:  
   - Implemented a two-headed model for simultaneous classification and image generation using LSTM and GANs.  
   - Extracted image feature vectors via **transfer learning** with ResNet18 and used these vectors as latent input for the GAN.  
 
-- **Chinmay Bakhale**:  
+- **Chinmay Bakhale M24DS005**:  
   - Developed an innovative approach using images to generate latent vectors for training GANs.  
 
-- **Raghav Borikar**:  
+- **Raghav Borikar M24DS010**:  
   - Improved the classification step for EEG signals.  
   - Worked on SNGAN fine-tuned for each subject to optimize training time and allow more epochs to be run.  
